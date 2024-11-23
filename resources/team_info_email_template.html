@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treasure Hunt Team Information</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #e0e0d1;
+            color: #2e2e2c;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-collapse: collapse;
+            border: 2px solid #444;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+        }
+        h2 {
+            color: #4b5320;
+            text-transform: uppercase;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .important {
+            font-weight: bold;
+            color: #b22222;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        ul li {
+            margin-bottom: 5px;
+        }
+        blockquote {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-left: 5px solid #8b0000;
+            font-style: italic;
+            color: #2e2e2c;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #e0e0d1;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td align="center" style="padding: 10px 0;">
+                <table class="container" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                    <tr>
+                        <td style="padding: 20px; background-color: #ffffff;">
+                            <h2>Dear Detective {{ name }},</h2>
+                            <p>We regret to inform you that the brilliant Sherlock Holmes has suffered a misfortune—an accident during his pursuit of the infamous Professor Moriarty has left him unable to continue his work. The situation, however, demands immediate attention, and the police have appointed <strong>you</strong> to step into his shoes.</p>
+                            <p>Your task is critical: unravel a complex case involving Moriarty’s latest scheme. He has orchestrated a digital heist with far-reaching implications, leaving behind a series of cryptic clues to taunt us. You must uncover six vital keywords that will thwart his plan.</p>
+                            <p>You will not face this challenge alone. You’ve been assigned to a team of detectives. Together, you must solve riddles, uncover clues, and navigate the dangers Moriarty has set.</p>
+                            <h3>Your Team Details:</h3>
+                            <ul>
+                                <li><strong>Team Members:</strong></li>
+                                {% for teammate in teammates %}
+                                <li>Detective {{ teammate }}</li>
+                                {% endfor %}
+                                <li>Detective {{ name }}</li>
+                            </ul>
+                            <p><strong>Your Agent Code:</strong> <span class="important">{{ code }}</span></p>
+                            <p>Due to the complexity of this mission, your team must divide into two subgroups to investigate separate clue paths. Coordination and teamwork are essential—without collaboration, you will not succeed.</p>
+                            <h3>Your Mission Begins Here:</h3>
+                            <p>Attached to this email is the first of Moriarty’s clues:</p>
+                            <blockquote>
+                                "The treasure depends on a chain, one that links trust into an unbreakable system. This system secures all and binds every piece together. What is its name?"
+                            </blockquote>
+                            <p>This first riddle is crucial. You and your team must remember its answer, as it will be submitted alongside the other five keywords you discover during the investigation. Without all six correct answers, the case cannot be solved, and Moriarty’s plan will succeed.</p>
+                            <p>Once the answer to this riddle is determined, your team must split into two subgroups to follow separate paths:</p>
+                            <ul>
+                                <li><strong>Path A:</strong> Investigate the disappearance of a critical worker in the system. (Go to TUM Blockchain Club Discord and find the thread inside the #core-chat)</li>
+                                <li><strong>Path B:</strong> Decipher a digital conundrum to uncover a key concept.</li>
+                            </ul>
+                            <p>Work quickly, detectives. The answers you uncover must be submitted in their entirety to a blockchain-based smart contract at the conclusion of your investigation. Details on the submission process will be provided later in the mission.</p>
+                            <p>Good luck, Detective {{ name }}. The fate of this investigation—and the safety of countless innocents—rests in your hands.</p>
+                            <p class="footer">Sincerely,</p>
+                            <p class="footer"><strong>Inspector Lestrade</strong><br>Metropolitan Police Service</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
