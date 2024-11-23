@@ -1,0 +1,4 @@
+resources/token.json
+resources/credentials.json
+.env
+resources/emails.txt
