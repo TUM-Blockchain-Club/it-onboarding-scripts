@@ -67,9 +67,8 @@
                             <p>We regret to inform you that the brilliant Sherlock Holmes has suffered a misfortune—an accident during his pursuit of the infamous Professor Moriarty has left him unable to continue his work. The situation, however, demands immediate attention, and the police have appointed <strong>you</strong> to step into his shoes.</p>
                             <p>Your task is critical: unravel a complex case involving Moriarty’s latest scheme. He has orchestrated a digital heist with far-reaching implications, leaving behind a series of cryptic clues to taunt us. You must uncover six vital keywords that will thwart his plan.</p>
                             <p>You will not face this challenge alone. You’ve been assigned to a team of detectives. Together, you must solve riddles, uncover clues, and navigate the dangers Moriarty has set.</p>
-                            <h3>Your Team Details:</h3>
+                            <h3>Your Teammates:</h3>
                             <ul>
-                                <li><strong>Team Members:</strong></li>
                                 {% for teammate in teammates %}
                                 <li>Detective {{ teammate }}</li>
                                 {% endfor %}
@@ -85,7 +84,7 @@
                             <p>This first riddle is crucial. You and your team must remember its answer, as it will be submitted alongside the other five keywords you discover during the investigation. Without all six correct answers, the case cannot be solved, and Moriarty’s plan will succeed.</p>
                             <p>Once the answer to this riddle is determined, your team must split into two subgroups to follow separate paths:</p>
                             <ul>
-                                <li><strong>Path A:</strong> Investigate the disappearance of a critical worker in the system. (Go to TUM Blockchain Club Discord and find the thread inside the #core-chat)</li>
+                                <li><strong>Path A:</strong> Investigate the disappearance of a critical worker in the system. (Go to TUM Blockchain Club Discord and find the channel {{ discord_channel_name }})</li>
                                 <li><strong>Path B:</strong> Decipher a digital conundrum to uncover a key concept.</li>
                             </ul>
                             <p>Work quickly, detectives. The answers you uncover must be submitted in their entirety to a blockchain-based smart contract at the conclusion of your investigation. Details on the submission process will be provided later in the mission.</p>

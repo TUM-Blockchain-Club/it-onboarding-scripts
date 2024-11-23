@@ -14,6 +14,7 @@ CSV_FILE = '../resources/participants.csv'
 TOKEN_FILE = '../resources/token.json'
 CREDENTIALS_FILE = '../resources/credentials.json'
 EMAIL_TEMPLATE_FILE = '../resources/team_info_email_template.html'
+DISCORD_CHANNEL_NAME = '#it-onboarding-wise-2425'
 
 # Define the required scopes for sending emails
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
@@ -26,12 +27,12 @@ def send_email(service, receiver_email, name, team, code, teammates):
     template = Template(template_content)
 
     # Render the template with dynamic values
-    body = template.render(name=name, team=team, code=code, teammates=teammates)
+    body = template.render(name=name, team=team, code=code, teammates=teammates, discord_channel_name=DISCORD_CHANNEL_NAME)
 
     # Create the email message
     message = MIMEMultipart()
     message['to'] = receiver_email
-    message['subject'] = "Treasure Hunt Team Information"
+    message['subject'] = "Urgent: Appointment as Temporary Detectives"
     message.attach(MIMEText(body, 'html'))
 
     # Encode the message in a format suitable for the Gmail API
