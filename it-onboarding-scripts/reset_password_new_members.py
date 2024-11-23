@@ -1,4 +1,3 @@
-import base64
 import os
 import os.path
 from google.auth.transport.requests import Request
@@ -12,6 +11,14 @@ import sys
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from jinja2 import Template
+import base64
+import re
+
+# File path constants
+EMAIL_TEMPLATE_FILE = '../resources/reset_password_template.html'
+TOKEN_FILE = '../resources/token.json'
+CREDENTIALS_FILE = '../resources/credentials.json'
+EMAIL_LIST_FILE = os.getenv('EMAIL_LIST_FILE')
 
 # Load environment variables from a custom .env file location if provided
 custom_env_path = sys.argv[1] if len(sys.argv) > 1 else None
@@ -30,13 +37,21 @@ SCOPES = [
 def generate_random_password(length=12):
     # Define the set of characters to use in the password (letters, digits, punctuation)
     characters = string.ascii_letters + string.digits + string.punctuation
-    # Use the 'secrets' library to generate a cryptographically secure random password
-    return ''.join(secrets.choice(characters) for i in range(length))
+    while True:
+        # Use the 'secrets' library to generate a cryptographically secure random password
+        password = ''.join(secrets.choice(characters) for i in range(length))
+        # Ensure the password fulfills secure password constraints
+        if (len(password) >= 12 and
+                re.search(r"[A-Z]", password) and
+                re.search(r"[a-z]", password) and
+                re.search(r"[0-9]", password) and
+                re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)):
+            return password
 
 # Function to send an email notification to the user's secondary email address using Gmail API
 def send_notification_email(service, secondary_email, user_email, new_password):
     # Load the email template from an HTML file
-    with open('../resources/reset_password_template.html', 'r') as template_file:
+    with open(EMAIL_TEMPLATE_FILE, 'r') as template_file:
         template_content = template_file.read()
     template = Template(template_content)
 
@@ -55,7 +70,7 @@ def send_notification_email(service, secondary_email, user_email, new_password):
     # Send the email using Gmail API
     try:
         service.users().messages().send(userId='me', body=raw_message).execute()
-        print(f"Notification email sent to {secondary_email}.")
+        print(f"Notification email for {user_email} sent to {secondary_email}.")
     except Exception as e:
         print(f"Failed to send notification email to {secondary_email}: {str(e)}")
 
@@ -75,8 +90,7 @@ def reset_password(admin_service, gmail_service, user_email):
         # Retrieve the user's details to get the secondary email
         user = admin_service.users().get(userKey=user_email).execute()
         # Extract secondary email from the 'emails' field where 'type' is 'work' and it's not the primary email
-        secondary_email = next((email['address'] for email in user.get('emails', []) if
-                                 not email.get('primary', False)), None)
+        secondary_email = next((email['address'] for email in user.get('emails', []) if email['type'] == 'work' and not email.get('primary', False)), None)
         if secondary_email:
             # Send a notification email to the secondary email address
             send_notification_email(gmail_service, secondary_email, user_email, new_password)
@@ -87,7 +101,6 @@ def reset_password(admin_service, gmail_service, user_email):
         print(f"Failed to reset password for {user_email}: {str(e)}")
 
 # Load email list from file or environment variable
-EMAIL_LIST_FILE = os.getenv('EMAIL_LIST_FILE')
 email_list = []
 
 # Check if an email list file is provided and exists
@@ -107,17 +120,17 @@ def main():
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first time.
-    if os.path.exists('../resources/token.json'):
-        creds = Credentials.from_authorized_user_file('../resources/token.json', SCOPES)
+    if os.path.exists(TOKEN_FILE):
+        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file('../resources/credentials.json', SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open('../resources/token.json', 'w') as token:
+        with open(TOKEN_FILE, 'w') as token:
             token.write(creds.to_json())
 
     # Build the service objects for interacting with the Admin SDK API and Gmail API
